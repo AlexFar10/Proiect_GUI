@@ -85,58 +85,85 @@ class TestRenderer extends JFrame implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
 
-        // Define the vertices and colors of the square
-        float[] vertices = {
-                -0.5f, -0.5f, // Vertex 1 (x, y)
-                0.5f, -0.5f, // Vertex 2 (x, y)
-                0.5f,  0.5f, // Vertex 3 (x, y)
-                -0.5f,  0.5f  // Vertex 4 (x, y)
-        };
-        float[] colors = {
-                1.0f, 0.0f, 0.0f, // Vertex 1: Red
-                0.0f, 1.0f, 0.0f, // Vertex 2: Green
-                0.0f, 0.0f, 1.0f, // Vertex 3: Blue
-                1.0f, 1.0f, 0.0f  // Vertex 4: Yellow
-        };
+        // Define the vertices and colors of the square.
+        float[] vertices =
+                {
+                        -0.5f, -0.5f, // Vertex 1 (x, y)
+                        0.5f, -0.5f, // Vertex 2 (x, y)
+                        0.5f, 0.5f,  // Vertex 3 (x, y)
+                        -0.5f, 0.5f  // Vertex 4 (x, y)
+                };
+        float[] colors =
+                {
+                        1.0f, 0.0f, 0.0f, // Vertex 1: Red
+                        0.0f, 1.0f, 0.0f, // Vertex 2: Green
+                        0.0f, 0.0f, 1.0f, // Vertex 3: Blue
+                        1.0f, 1.0f, 0.0f  // Vertex 4: Yellow
+                };
 
-        // Draw the square using GL_LINES
+        // Draw the square using GL_LINES.
         gl.glBegin(GL2.GL_LINES);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++)
+        {
             gl.glColor3fv(colors, i * 3);
             gl.glVertex2fv(vertices, i * 2);
             gl.glColor3fv(colors, ((i + 1) % 4) * 3);
             gl.glVertex2fv(vertices, ((i + 1) % 4) * 2);
         }
         gl.glEnd();
+
         gl.glMatrixMode(GL2.GL_MODELVIEW);  // switch to the modelview matrix
         gl.glLoadIdentity();               // reset the matrix to the identity matrix
 
         gl.glTranslatef(0.5f, 0.3f, 0.0f);
         gl.glBegin(GL2.GL_LINE_STRIP);
 
-// Draw the square using GL_QUADS
+        // Draw the square using GL_QUADS.
         gl.glBegin(GL2.GL_QUADS);
-        for (int i = 0; i < 4; i++) {
-            // Specify the color for the current vertex
+        for (int i = 0; i < 4; i++)
+        {
+            // Specify the color for the current vertex.
             gl.glColor3fv(colors, i * 3);
-            // Specify the coordinates for the current vertex
+            // Specify the coordinates for the current vertex.
             gl.glVertex2fv(vertices, i * 2);
         }
-// Repeat the first vertex to close the quad
+        // Repeat the first vertex to close the quad.
         gl.glVertex2fv(vertices, 0);
         gl.glEnd();
 
         gl.glTranslatef(0.3f, 0.1f, 0.0f);
         gl.glBegin(GL2.GL_LINE_LOOP);
-        for (int i = 0; i < 4; i++) {
-            gl.glColor3fv(colors, i * 3);  // set the color for the current vertex
-            gl.glVertex2fv(vertices, i * 2); // setam coordonatele varfului patratului
+        for (int i = 0; i < 4; i++)
+        {
+            gl.glColor3fv(colors, i * 3);   // set the color for the current vertex
+            gl.glVertex2fv(vertices, i * 2); // set the coordinates for the current vertex
         }
         gl.glEnd();
 
+        // Set up variables for rendering a circle.
+        final int num_segments = 100;
+        final float radius = 0.5f;
+        final float theta = 2.0f * (float) Math.PI / (float) num_segments;
+        float cos_theta = (float) Math.cos(theta);
+        float sin_theta = (float) Math.sin(theta);
+        float x = radius;
+        float y = 0.0f;
 
+        // Set the color to yellow.
+        gl.glColor3f(1.0f, 1.0f, 0.0f);
 
-        // Forcing the scene to be rendered.
+        // Render the circle.
+        gl.glBegin(GL2.GL_LINE_LOOP);
+        for (int i = 0; i < num_segments; i++)
+        {
+            gl.glVertex2f(x, y);
+            float new_x = cos_theta * x - sin_theta * y;
+            y = sin_theta * x + cos_theta * y;
+            x = new_x;
+        }
+        gl.glEnd();
+
+        // Force the scene to be rendered.
         gl.glFlush();
     }
 
